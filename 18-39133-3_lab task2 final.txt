@@ -1,0 +1,155 @@
+****code1 sum 5 time (1+5+9+13+17+..)****
+
+org 100h
+.data
+sum dw ?
+.code
+main proc
+    mov ax, @data
+    mov ds, ax
+    
+    mov cx, 5
+    mov ax, 0
+    mov bx, 1
+    
+    level:
+    add ax, bx
+    add bx,  4
+    mov sum, ax
+    
+    loop level
+     end main
+     
+
+ret
+
+**** code2 sum 4 time(20+15+10+5)***
+
+org 100h
+.data
+sum dw ?
+.code
+main proc
+    mov ax, @data
+    mov ds, ax
+    
+    mov cx, 4
+    mov ax, 0
+    mov bx, 20
+    
+    level:
+    add ax, bx
+    sub bx,  5
+    mov sum, ax
+    
+    loop level
+    end main
+     
+
+ret
+
+** code 3 (print 50 time d in loop)
+org 100h
+.data
+msg1 db 'Enter a character:$'
+msg2 db 0dh, 0ah, 'Thank you.$'
+
+.code
+main proc
+    
+    
+    mov ax, @data
+    mov ds, ax
+    mov cx, 50
+    mov ah,9
+    
+    lea dx, msg1
+    int 21h
+    mov ah, 1
+    int 21h
+    mov bl, al
+    mov ah, 2
+    mov dl,10
+    int 21h
+    mov dl, 13
+    int 21h
+    
+    level:
+    mov ah, 2
+    
+    mov dl, bl
+    int 21h
+    
+    loop level
+    mov ah,9
+    lea dx, msg2
+    int 21h
+    
+    
+
+    end main
+     
+
+ret
+
+
+*** code 4 show alphabetical order***
+
+org 100h
+
+.data
+msg1 db 'Enter a character: $'
+msg2 db 'in Alphabetical order: $'
+newline db 0dh, 0ah,'$'
+
+.code
+main proc
+    mov ax, @data
+    mov ds , ax
+    mov ah , 9
+    lea dx, msg1
+    int 21h
+    mov ah , 2
+    int 21h 
+    
+    mov ah, 1
+    int 21h
+    mov bl, al
+    
+    mov ah, 1
+    int 21h
+    mov bh, al
+    
+    mov ah,9
+    lea dx, newline
+    int 21h
+    lea dx, msg2
+    int 21h
+    
+    mov ah, 2
+    
+    cmp bl, bh
+    
+    jge gr
+    mov dl, bl
+    int 21h
+    
+   
+   mov dl, bh
+   int 21h
+   
+   jmp exit
+   
+   gr:
+   mov dl, bh
+   int 21h
+   mov dl, bl
+   int 21h
+   exit:
+   mov ah, 4ch 
+   int 21h
+   main endp
+end main
+ret
+
+

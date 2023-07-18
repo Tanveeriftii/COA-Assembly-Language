@@ -1,0 +1,194 @@
+**Write a program to input a binary number and display output in binary number**
+
+.model small
+.stack 100h
+.data
+msg db 'input: $' 
+msg1 db 0dh, 0ah, 'output: $' 
+
+.code
+    main proc
+        mov ax,@data
+        mov ds,ax
+        
+       
+       mov ah,09h
+       lea dx,msg
+       int 21h 
+       
+       mov bx,0
+       mov cx,8
+       
+       lev1:
+       mov ah ,01h
+       int 21h
+       cmp al,13
+       
+       je print
+       
+       
+       and al,0Fh 
+       shl bx,1  
+       or bl,al  
+       loop lev1
+       
+     print:
+        mov ah,09h
+        lea dx,msg1
+        int 21h
+       
+        
+        mov cx,8 
+      
+        show:
+        shl bl,1
+        
+        jnc lev2
+            mov dl,49
+            mov ah,02h
+            int 21h
+            jmp display 
+        
+        lev2:
+            mov dl,48
+            mov ah,02h
+            int 21h
+            
+             
+        display:
+            loop show
+            
+          mov ah,4ch
+          int 21h
+          main endp
+    end main
+
+** hexa number input-output **
+	
+.model small
+.stack 100h
+.data
+msg db 'Enter hexa number: $'
+msg1 db 0dh, 0ah, 'result: $'
+.code
+main proc
+    
+    mov ax,@data
+    mov ds,ax
+     
+    mov ah,09h
+    lea dx,msg
+    int 21h 
+
+mov bx,0
+mov cl,4
+mov ah,1
+
+input:
+int 21h
+cmp al,0DH
+je output
+cmp al,41h
+jge letter 
+
+sub al, 48
+jmp shift
+
+
+letter:
+sub al,37h
+
+shift:
+
+shl bx,cl
+or bl,al
+jmp input
+
+
+output:
+        mov ah,09h
+        lea dx,msg1
+        int 21h
+        mov cx, 4
+        mov ah,2
+
+
+shift2:
+
+mov dl,bh
+shr dl,4
+rol bx,4
+cmp dl,10
+jge letter2
+
+add dl,48
+int 21h
+jmp exit
+
+letter2:
+add dl,55
+int 21h
+
+exit:
+loop shift2
+
+ mov ah,4ch
+ int 21h  
+ main endp
+end main
+	
+** reverse form **
+	
+.model small
+.stack 100h
+.data
+msg db 'normal form: $'
+msg1 db 0dh,0ah, 'Reverse form: $'
+.code
+
+main proc
+    mov ax,@data
+    mov ds,ax   
+    
+    mov ah,09h
+    lea dx,msg
+    int 21h
+    
+    mov ah,1
+    xor cx,cx
+    
+    input:
+    int 21h
+    cmp al,0dh
+       
+    je exit_input
+    push ax
+    inc cx
+    jmp input
+    
+    exit_input:
+    mov ah,09h
+    lea dx,msg1
+    int 21h
+    
+    mov ah,2
+    
+    output:
+    pop dx
+    int 21h
+    loop output
+    
+     
+    exit:
+    mov ah,4ch
+    int 21h
+    main endp
+end main
+       
+       
+       
+       
+       
+       
+       
+
